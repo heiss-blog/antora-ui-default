@@ -16,7 +16,7 @@ jobs:
       - name: Install gulp && dependencies
         run: npm i -g gulp-cli && npm i
       - name: build template
-        run: gulp build
+        run: gulp bundle
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
