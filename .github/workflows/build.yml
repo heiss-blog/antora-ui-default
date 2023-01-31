@@ -27,6 +27,13 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: true
+      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          tag_name: develop #(required) tag name to delete
+          delete_release: true #(optional) default: true
+          # repo: <owner>/<repoName> #(optional) target repository. default: repo running this action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -37,3 +44,9 @@ jobs:
           asset_path: ./build/ui-bundle.zip
           asset_name: ui-bundle.zip
           asset_content_type: application/zip
+      - name: Repository Dispatch to Antora
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.EVENT_SECRET }}
+          repository: heiss-blog/antora
+          event-type: child-changed
